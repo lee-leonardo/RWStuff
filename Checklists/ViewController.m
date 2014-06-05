@@ -54,6 +54,7 @@
 
 }
 
+#pragma mark - Delegate
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return [_items count];
@@ -83,6 +84,7 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark - Configure
 -(void)configureTextForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item
 {
 	UILabel *label = (UILabel *) [cell viewWithTag:1000];
@@ -96,6 +98,31 @@
 	} else {
 		cell.accessoryType = UITableViewCellAccessoryNone;
 	}
+}
+
+#pragma mark - Add Item
+-(IBAction)addItem
+{
+	NSInteger newRowIndex = [_items count];
+	
+	ChecklistItem *item = [[ChecklistItem alloc] init];
+	item.text = @"New Row";
+	item.checked = NO;
+	[_items addObject:item];
+	
+//	Makes an indexPath item, which is put into an array, then the table is refreshed accordingly.
+	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:newRowIndex inSection:0];
+	NSArray *indexPaths = @[indexPath];
+	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+#pragma mark - Delete Item
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	[_items removeObjectAtIndex:indexPath.row];
+	
+	NSArray *indexPaths = @[indexPath];
+	[tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 

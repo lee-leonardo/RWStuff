@@ -10,5 +10,6 @@
 #import "ChecklistItem.h"
 
 @interface ViewController : UITableViewController
+-(IBAction)addItem;
 
 @end
