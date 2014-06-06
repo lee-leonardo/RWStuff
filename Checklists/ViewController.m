@@ -136,5 +136,22 @@
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - Segues
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	if ([segue.identifier isEqualToString:@"AddItem"]) {
+//		1
+		UINavigationController *navigationController = segue.destinationViewController;
+//		2
+		AddItemViewController *controller = (AddItemViewController *)navigationController.topViewController;
+//		3
+		controller.delegate = self;
+	}
+}
 
 @end
+
+
+
+
+
