@@ -84,7 +84,8 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - Configure
+#pragma mark - TableView Manipulation
+#pragma mark Configure
 -(void)configureTextForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item
 {
 	UILabel *label = (UILabel *) [cell viewWithTag:1000];
@@ -99,8 +100,7 @@
 		cell.accessoryType = UITableViewCellAccessoryNone;
 	}
 }
-
-#pragma mark - Add Item
+#pragma mark Add Item
 -(IBAction)addItem
 {
 	NSInteger newRowIndex = [_items count];
@@ -116,13 +116,24 @@
 	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-#pragma mark - Delete Item
+#pragma mark Delete Item
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[_items removeObjectAtIndex:indexPath.row];
 	
 	NSArray *indexPaths = @[indexPath];
 	[tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+#pragma mark - AddItemViewControllerDelegate
+-(void)addItemViewControllerDidCancel:(AddItemViewController *)controller
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)addItemViewController:(AddItemViewController *)controller didFinishAddingItem:(ChecklistItem *)item
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
