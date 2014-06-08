@@ -11,6 +11,6 @@
 #import "AddItemViewController.h"
 
 @interface ViewController : UITableViewController <AddItemViewControllerDelegate>
--(IBAction)addItem;
+//-(IBAction)addItem;
 
 @end

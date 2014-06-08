@@ -94,27 +94,34 @@
 
 -(void)configureCheckmarkForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item
 {
+//	if (item.checked) {
+//		cell.accessoryType = UITableViewCellAccessoryCheckmark;
+//	} else {
+//		cell.accessoryType = UITableViewCellAccessoryNone;
+//	}
+	UILabel *label = (UILabel *)[cell viewWithTag:1001];
+	
 	if (item.checked) {
-		cell.accessoryType = UITableViewCellAccessoryCheckmark;
+		label.text = @"√";
 	} else {
-		cell.accessoryType = UITableViewCellAccessoryNone;
+		label.text =@"";
 	}
 }
-#pragma mark Add Item
--(IBAction)addItem
-{
-	NSInteger newRowIndex = [_items count];
-	
-	ChecklistItem *item = [[ChecklistItem alloc] init];
-	item.text = @"New Row";
-	item.checked = NO;
-	[_items addObject:item];
-	
-//	Makes an indexPath item, which is put into an array, then the table is refreshed accordingly.
-	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:newRowIndex inSection:0];
-	NSArray *indexPaths = @[indexPath];
-	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-}
+//#pragma mark Add Item
+//-(IBAction)addItem
+//{
+//	NSInteger newRowIndex = [_items count];
+//	
+//	ChecklistItem *item = [[ChecklistItem alloc] init];
+//	item.text = @"New Row";
+//	item.checked = NO;
+//	[_items addObject:item];
+//	
+////	Makes an indexPath item, which is put into an array, then the table is refreshed accordingly.
+//	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:newRowIndex inSection:0];
+//	NSArray *indexPaths = @[indexPath];
+//	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+//}
 
 #pragma mark Delete Item
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -133,6 +140,13 @@
 
 -(void)addItemViewController:(AddItemViewController *)controller didFinishAddingItem:(ChecklistItem *)item
 {
+	NSInteger newRowIndex = [_items count];
+	[_items addObject:item];
+	
+	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRowIndex inSection:0];
+	NSArray *indexPaths = @[indexPath];
+	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
