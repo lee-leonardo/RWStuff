@@ -10,7 +10,7 @@
 #import "ChecklistItem.h"
 #import "ItemDetailViewController.h"
 
-@interface ViewController : UITableViewController <AddItemViewControllerDelegate>
+@interface ViewController : UITableViewController <ItemDetailViewControllerDelegate>
 //-(IBAction)addItem;
 
 @end

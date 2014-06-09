@@ -16,10 +16,35 @@
 {
 	NSMutableArray *_items;
 }
+#pragma mark - Saving Data
+-(NSString *)documentsDirectory
+{
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths firstObject];
+	return documentsDirectory;
+}
 
+-(NSString *)dataFilePath
+{
+	return [[self documentsDirectory] stringByAppendingPathComponent:@"Checklists.plist"];
+}
+
+-(void)saveChecklistItems
+{
+	NSMutableData *data = [[NSMutableData alloc] init];
+	NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+	[archiver encodeObject:_items forKey:@"ChecklistItems"];
+	[data writeToFile:[self dataFilePath] atomically:YES];
+}
+
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	NSLog(@"Documents folder is %@", [self documentsDirectory]);
+	NSLog(@"Data file is %@", [self dataFilePath]);
+	
 	_items = [[NSMutableArray alloc] initWithCapacity:20];
 	
 	ChecklistItem *item;
@@ -132,13 +157,13 @@
 	[tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-#pragma mark - AddItemViewControllerDelegate
--(void)addItemViewControllerDidCancel:(ItemDetailViewController *)controller
+#pragma mark - ItemDetailViewControllerDelegate
+-(void)itemDetailViewControllerDidCancel:(ItemDetailViewController *)controller
 {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)addItemViewController:(ItemDetailViewController *)controller didFinishAddingItem:(ChecklistItem *)item
+-(void)itemDetailViewController:(ItemDetailViewController *)controller didFinishAddingItem:(ChecklistItem *)item
 {
 	NSInteger newRowIndex = [_items count];
 	[_items addObject:item];
@@ -146,16 +171,17 @@
 	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRowIndex inSection:0];
 	NSArray *indexPaths = @[indexPath];
 	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-	
+	[self saveChecklistItems];
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)addItemViewController:(ItemDetailViewController *)controller didFinishEditingItem:(ChecklistItem *)item
+-(void)itemDetailViewController:(ItemDetailViewController *)controller didFinishEditingItem:(ChecklistItem *)item
 {
 	NSInteger index = [_items indexOfObject:item];
 	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
 	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
 	[self configureTextForCell:cell withChecklistItem:item];
+	[self saveChecklistItems];
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
