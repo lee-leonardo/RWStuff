@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Leonardo Lee. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "ChecklistViewController.h"
 #import "ChecklistItem.h"
 
-@interface ViewController ()
+@interface ChecklistViewController ()
 
 @end
 
-@implementation ViewController
+@implementation ChecklistViewController
 {
 	NSMutableArray *_items;
 }
