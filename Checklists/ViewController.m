@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "ChecklistItem.h"
 
 @interface ViewController ()
 
@@ -34,6 +35,7 @@
 	NSMutableData *data = [[NSMutableData alloc] init];
 	NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 	[archiver encodeObject:_items forKey:@"ChecklistItems"];
+	[archiver finishEncoding];
 	[data writeToFile:[self dataFilePath] atomically:YES];
 }
 
@@ -69,7 +71,7 @@
 //	NSLog(@"Data file is %@", [self dataFilePath]);
 	
 //	_items = [[NSMutableArray alloc] initWithCapacity:20];
-//	
+//
 //	ChecklistItem *item;
 //	
 //	item = [[ChecklistItem alloc] init];
