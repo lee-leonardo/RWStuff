@@ -133,12 +133,12 @@
 }
 
 #pragma mark - AddItemViewControllerDelegate
--(void)addItemViewControllerDidCancel:(AddItemViewController *)controller
+-(void)addItemViewControllerDidCancel:(ItemDetailViewController *)controller
 {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)addItemViewController:(AddItemViewController *)controller didFinishAddingItem:(ChecklistItem *)item
+-(void)addItemViewController:(ItemDetailViewController *)controller didFinishAddingItem:(ChecklistItem *)item
 {
 	NSInteger newRowIndex = [_items count];
 	[_items addObject:item];
@@ -150,6 +150,15 @@
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)addItemViewController:(ItemDetailViewController *)controller didFinishEditingItem:(ChecklistItem *)item
+{
+	NSInteger index = [_items indexOfObject:item];
+	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+	[self configureTextForCell:cell withChecklistItem:item];
+	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - Segues
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -157,9 +166,18 @@
 //		1
 		UINavigationController *navigationController = segue.destinationViewController;
 //		2
-		AddItemViewController *controller = (AddItemViewController *)navigationController.topViewController;
+		ItemDetailViewController *controller = (ItemDetailViewController *)navigationController.topViewController;
 //		3
 		controller.delegate = self;
+		
+	} else if ([segue.identifier isEqualToString:@"EditItem"]) {
+		UINavigationController *navigationController = segue.destinationViewController;
+		
+		ItemDetailViewController *controller = (ItemDetailViewController *)navigationController.topViewController;
+		
+		controller.delegate = self;
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+		controller.itemToEdit = _items[indexPath.row];
 	}
 }
 

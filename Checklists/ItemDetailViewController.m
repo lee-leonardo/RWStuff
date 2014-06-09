@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Leonardo Lee. All rights reserved.
 //
 
-#import "AddItemViewController.h"
+#import "ItemDetailViewController.h"
 #import "ChecklistItem.h"
 
-@interface AddItemViewController ()
+@interface ItemDetailViewController ()
 
 @end
 
-@implementation AddItemViewController
+@implementation ItemDetailViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -33,6 +33,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	if (self.itemToEdit != nil) {
+		self.title = @"Edit Item";
+		self.textField.text = self.itemToEdit.text;
+		self.doneBarButton.enabled = YES;
+	}
 }
 
 -(IBAction)cancel
@@ -42,13 +48,17 @@
 
 -(IBAction)done
 {
-//	NSLog(@"Contents of the text field: %@", self.textField.text);
-	ChecklistItem *item = [[ChecklistItem alloc] init];
-	item.text = self.textField.text;
-	item.checked = NO;
-	
-	[self.delegate addItemViewController:self didFinishAddingItem:item];
-	
+	if (self.itemToEdit == nil) {
+		//	NSLog(@"Contents of the text field: %@", self.textField.text);
+		ChecklistItem *item = [[ChecklistItem alloc] init];
+		item.text = self.textField.text;
+		item.checked = NO;
+		
+		[self.delegate addItemViewController:self didFinishAddingItem:item];
+	} else {
+		self.itemToEdit.text = self.itemToEdit.text;
+		[self.delegate addItemViewController:self didFinishEditingItem:self.itemToEdit];
+	}
 }
 
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndex:(NSIndexPath *)indexPath
