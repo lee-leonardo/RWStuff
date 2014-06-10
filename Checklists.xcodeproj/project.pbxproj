@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3811315319464B3C00F17B48 /* AllListsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3811315219464B3C00F17B48 /* AllListsViewController.m */; };
+		3811315619464F8300F17B48 /* Checklist.m in Sources */ = {isa = PBXBuildFile; fileRef = 3811315519464F8300F17B48 /* Checklist.m */; };
 		3883CA0819400CD800D581D9 /* ItemDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3883CA0719400CD800D581D9 /* ItemDetailViewController.m */; };
 		38DE9D5D193F102300B21EBD /* ChecklistItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 38DE9D5C193F102300B21EBD /* ChecklistItem.m */; };
 		38F066B9193D5B4A003A791E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38F066B8193D5B4A003A791E /* Foundation.framework */; };
@@ -39,6 +40,8 @@
 /* Begin PBXFileReference section */
 		3811315119464B3C00F17B48 /* AllListsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllListsViewController.h; sourceTree = "<group>"; };
 		3811315219464B3C00F17B48 /* AllListsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllListsViewController.m; sourceTree = "<group>"; };
+		3811315419464F8300F17B48 /* Checklist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Checklist.h; sourceTree = "<group>"; };
+		3811315519464F8300F17B48 /* Checklist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Checklist.m; sourceTree = "<group>"; };
 		3883CA0619400CD800D581D9 /* ItemDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemDetailViewController.h; sourceTree = "<group>"; };
 		3883CA0719400CD800D581D9 /* ItemDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemDetailViewController.m; sourceTree = "<group>"; };
 		38DE9D5B193F102300B21EBD /* ChecklistItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChecklistItem.h; sourceTree = "<group>"; };
@@ -114,6 +117,8 @@
 			children = (
 				38DE9D5B193F102300B21EBD /* ChecklistItem.h */,
 				38DE9D5C193F102300B21EBD /* ChecklistItem.m */,
+				3811315419464F8300F17B48 /* Checklist.h */,
+				3811315519464F8300F17B48 /* Checklist.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -294,6 +299,7 @@
 				38F066C5193D5B4B003A791E /* main.m in Sources */,
 				3883CA0819400CD800D581D9 /* ItemDetailViewController.m in Sources */,
 				38DE9D5D193F102300B21EBD /* ChecklistItem.m in Sources */,
+				3811315619464F8300F17B48 /* Checklist.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
