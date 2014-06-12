@@ -7,6 +7,7 @@
 //
 
 #import "ChecklistViewController.h"
+#import "Checklist.h"
 #import "ChecklistItem.h"
 
 @interface ChecklistViewController ()
@@ -66,6 +67,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	self.title = self.checklist.name;
 	
 //	NSLog(@"Documents folder is %@", [self documentsDirectory]);
 //	NSLog(@"Data file is %@", [self dataFilePath]);
