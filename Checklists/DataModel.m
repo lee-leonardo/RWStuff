@@ -7,21 +7,39 @@
 //
 
 #import "DataModel.h"
+#import "Checklist.h"
 
 @implementation DataModel
 
 #pragma mark - Init
 -(void)registerDefaults
 {
-	NSDictionary *dictionary = @{@"ChecklistIndex": @-1};
+	NSDictionary *dictionary = @{
+								 @"ChecklistIndex": @-1,
+								 @"FirstTime": @YES,
+								 @"ChecklistItemId": @0
+								 };
 	[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
 }
-
+-(void)handleFirstTime
+{
+	BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
+	
+	if (firstTime) {
+		Checklist *checklist = [[Checklist alloc] init];
+		checklist.name = @"List";
+		[self.lists addObject:checklist];
+		[self setIndexOfSelectedChecklist:0];
+		
+		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FirstTime"];
+	}
+}
 -(id)init
 {
 	if ((self = [super init])) {
 		[self loadChecklists];
 		[self registerDefaults];
+		[self handleFirstTime];
 	}
 	return self;
 }
@@ -69,4 +87,26 @@
 	[[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"ChecklistIndex"];
 }
 
+#pragma mark - Methods
+-(void)sortChecklists
+{
+	[self.lists sortUsingSelector:@selector(compare:)];
+}
+
+#pragma mark - NSNotification
++(NSInteger)nextChecklistItemId
+{
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSInteger itemId = [userDefaults integerForKey:@"ChecklistItemId"];
+	[userDefaults setInteger:itemId+1 forKey:@"ChecklistItemId"];
+	[userDefaults synchronize]; //Forces User defaults to write the changes immediately.
+	return itemId;
+}
+
 @end
+
+
+
+
+
+

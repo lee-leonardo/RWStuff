@@ -20,6 +20,10 @@
 //	[controller saveChecklists];
 	[_dataModel saveChecklists];
 }
+-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+	NSLog(@"didReceiveLocalNotification %@", notification);
+}
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -29,6 +33,15 @@
 	UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
 	AllListsViewController *controller = navigationController.viewControllers[0];
 	controller.dataModel = _dataModel;
+	
+//	NSDate *date = [NSDate dateWithTimeIntervalSinceNow:10];
+//	UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+//	localNotification.fireDate = date;
+//	localNotification.timeZone = [NSTimeZone defaultTimeZone];
+//	localNotification.alertBody = @"I am a local notification!";
+//	localNotification.soundName = UILocalNotificationDefaultSoundName;
+//	
+//	[[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 	
     return YES;
 }

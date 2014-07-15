@@ -139,7 +139,8 @@
 -(void)configureTextForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item
 {
 	UILabel *label = (UILabel *) [cell viewWithTag:1000];
-	label.text = item.text;
+//	label.text = item.text;
+	label.text = [NSString stringWithFormat:@"%d: %@", item.itemId, item.text];
 }
 
 -(void)configureCheckmarkForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item
@@ -150,6 +151,7 @@
 //		cell.accessoryType = UITableViewCellAccessoryNone;
 //	}
 	UILabel *label = (UILabel *)[cell viewWithTag:1001];
+	label.textColor = self.view.tintColor;
 	
 	if (item.checked) {
 		label.text = @"√";

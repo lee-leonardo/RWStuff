@@ -51,7 +51,11 @@
 		[self performSegueWithIdentifier:@"ShowChecklist" sender:checklist];
 	}
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	[self.tableView reloadData];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -70,13 +74,25 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellID];
     
 	if (cell == nil) {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellID];
 	}
 //	cell.textLabel.text = [NSString stringWithFormat:@"List %d", indexPath.row];
 	Checklist *checklist = self.dataModel.lists[indexPath.row];
 	cell.textLabel.text = checklist.name;
 	cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    
+	
+	int count = [checklist countUncheckedItems];
+	if ([checklist.items count] == 0) { //To make sure that the checklist is not empty, because that requires different functionality.
+		cell.detailTextLabel.text = @"(No Items)";
+	} else if (count == 0) {
+		cell.detailTextLabel.text = @"All Done!";
+	} else {
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Remaining", count];
+	}
+	
+	cell.imageView.image = [UIImage imageNamed:checklist.iconName];
+
+
     return cell;
 }
 
@@ -174,20 +190,29 @@
 }
 -(void)listDetailviewController:(ListDetailViewController *)controller didFinishAddingChecklists:(Checklist *)checklist
 {
-	NSInteger newRowIndex = [self.dataModel.lists count];
+//	NSInteger newRowIndex = [self.dataModel.lists count];
+//	[self.dataModel.lists addObject:checklist];
+//	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRowIndex inSection:0];
+//	NSArray *indexPaths = @[indexPath];
+//	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	
 	[self.dataModel.lists addObject:checklist];
-	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRowIndex inSection:0];
-	NSArray *indexPaths = @[indexPath];
-	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	[self.dataModel sortChecklists];
+	[self.tableView reloadData];
+	
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)listDetailviewController:(ListDetailViewController *)controller didFinishEditingChecklists:(Checklist *)checklist
 {
-	NSInteger index = [self.dataModel.lists indexOfObject:checklist];
-	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+//	NSInteger index = [self.dataModel.lists indexOfObject:checklist];
+//	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+//	
+//	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+//	cell.textLabel.text = checklist.name;
 	
-	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-	cell.textLabel.text = checklist.name;
+	[self.dataModel sortChecklists];
+	[self.tableView reloadData];
+	
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
