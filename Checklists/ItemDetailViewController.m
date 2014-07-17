@@ -67,13 +67,22 @@
 		item.shouldRemind = self.switchControl.on;
 		item.dueDate = _dueDate;
 		
+		[item scheduleNotification];
+		
 		[self.delegate itemDetailViewController:self didFinishAddingItem:item];
 	} else {
 		self.itemToEdit.text = self.itemToEdit.text;
 		self.itemToEdit.shouldRemind = self.switchControl.on;
 		self.itemToEdit.dueDate = _dueDate;
+		
+		[self.itemToEdit scheduleNotification];
+		
 		[self.delegate itemDetailViewController:self didFinishEditingItem:self.itemToEdit];
 	}
+}
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+	[self hideDatePicker];
 }
 #pragma TableView delegate methods
 //Weird usage of CelForRowAtIndexPath and NumberOfRowsInSection... because they are utilizing values from static cells.
@@ -118,7 +127,12 @@
 	[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 	[self.textField resignFirstResponder];
 	if (indexPath.section == 1 && indexPath.row == 1) {
-		[self showDatePicker];
+		if (!_datePickerVisible) {
+			[self showDatePicker];
+		} else {
+			[self hideDatePicker];
+		}
+		
 	}
 }
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndex:(NSIndexPath *)indexPath
@@ -159,8 +173,36 @@
 {
 	_datePickerVisible = YES;
 	
+	NSIndexPath *indexPathDateRow = [NSIndexPath indexPathForRow:1 inSection:1];
 	NSIndexPath *indexPathDatePicker= [NSIndexPath indexPathForRow:2 inSection:1];
+	
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPathDateRow];
+	cell.detailTextLabel.textColor = cell.detailTextLabel.tintColor;
+	
+	[self.tableView beginUpdates];
 	[self.tableView insertRowsAtIndexPaths:@[indexPathDatePicker] withRowAnimation:UITableViewRowAnimationFade];
+	[self.tableView reloadRowsAtIndexPaths:@[indexPathDateRow] withRowAnimation:UITableViewRowAnimationNone];
+	[self.tableView endUpdates];
+	
+	UITableViewCell *datePickerCell = [self.tableView cellForRowAtIndexPath:indexPathDatePicker];
+	UIDatePicker *datePicker = (UIDatePicker *) [datePickerCell viewWithTag:100];
+	[datePicker setDate:_dueDate animated:NO];
+}
+-(void)hideDatePicker
+{
+	if (_datePickerVisible) {
+		_datePickerVisible = NO;
+		
+		NSIndexPath *indexPathDateRow = [NSIndexPath indexPathForRow:1 inSection:1];
+		NSIndexPath *indexPathDatePicker = [NSIndexPath indexPathForRow:2 inSection:1];
+		UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPathDateRow];
+		cell.detailTextLabel.textColor = [UIColor colorWithWhite:0.0f alpha:0.f];
+		
+		[self.tableView beginUpdates];
+		[self.tableView reloadRowsAtIndexPaths:@[indexPathDateRow] withRowAnimation:UITableViewRowAnimationNone];
+		[self.tableView deleteRowsAtIndexPaths:@[indexPathDatePicker] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView endUpdates];
+	}
 }
 -(void)dateChanged:(UIDatePicker *)datePicker
 {
@@ -168,6 +210,9 @@
 	[self updateDueDateLabel];
 }
 @end
+
+
+
 
 
 
